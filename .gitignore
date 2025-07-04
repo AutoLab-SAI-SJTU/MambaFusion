@@ -1,0 +1,49 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.pyd
+*.pyo
+
+# === 编译缓存 ===
+build/
+dist/
+*.o
+*.out
+
+# === VSCode 或其他IDE配置 ===
+.vscode/
+.idea/
+
+# === 日志/运行产物 ===
+*.log
+*.tmp
+*.bak
+*.swp
+
+# === 模型/大文件/权重 ===
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.npz
+*.h5
+
+# === 项目数据、结果输出（可根据实际改动）===
+data
+data/
+output
+output/
+results/
+work_dirs/
+ckpts
+
+# === Jupyter ===
+.ipynb_checkpoints/
+
+# === 环境文件 ===
+.env
+
+# === Git自身 ===
+.git/

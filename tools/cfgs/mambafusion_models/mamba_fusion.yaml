@@ -1,0 +1,377 @@
+CLASS_NAMES: ['car','truck', 'construction_vehicle', 'bus', 'trailer',
+              'barrier', 'motorcycle', 'bicycle', 'pedestrian', 'traffic_cone']
+return_abs_coords: &return_abs_coords True
+use_test_interval: &use_test_interval 1
+DATA_CONFIG:
+    # USE_DEPTH: True
+    _BASE_CONFIG_: cfgs/dataset_configs/nuscenes_dataset.yaml
+    SAMPLED_INTERVAL: {
+        'train': 1,
+        'test': *use_test_interval
+    }
+    POINT_CLOUD_RANGE: [-54.0, -54.0, -5.0, 54.0, 54.0, 3.0]
+    INFO_PATH: {
+      'train': [nuscenes_infos_10sweeps_train_withimg.pkl],
+      # 'test': [nuscenes_infos_10sweeps_train_withimg.pkl], # 
+      'test': [nuscenes_infos_10sweeps_val_withimg.pkl], # 
+    }
+    CAMERA_CONFIG:
+      USE_CAMERA: True
+      IMAGE:
+          FINAL_DIM: [256,704]
+          RESIZE_LIM_TRAIN: [0.38, 0.55]
+          RESIZE_LIM_TEST: [0.48, 0.48]
+      # USE_SWEEP: 1
+    DATA_AUGMENTOR:
+        DISABLE_AUG_LIST: ['placeholder']
+        AUG_CONFIG_LIST:
+            - NAME: gt_sampling
+              # APP_TAG: 'fusion4'
+              IMG_AUG_TYPE: nuscenes
+              IMG_AUG_MIXUP: 0.7
+              DB_INFO_PATH:
+                - nuscenes_dbinfos_10sweeps_withvelo.pkl
+
+              PREPARE: {
+                filter_by_min_points: [
+                    'car:5','truck:5', 'construction_vehicle:5', 'bus:5', 'trailer:5',
+                    'barrier:5', 'motorcycle:5', 'bicycle:5', 'pedestrian:5', 'traffic_cone:5'
+                ],
+              }
+              # USE_H5: True
+              USE_DEL: False
+              USE_SHARED_MEMORY: False  # set it to True to speed up (it costs about 24+150GB shared memory)
+              DB_DATA_PATH:
+                - nuscenes_10sweeps_withvelo_lidar.npy
+                - nuscenes_10sweeps_withvelo_img.npy
+
+
+              SAMPLE_GROUPS: [
+                'car:2','truck:3', 'construction_vehicle:7', 'bus:4', 'trailer:6',
+                'barrier:2', 'motorcycle:6', 'bicycle:6', 'pedestrian:2', 'traffic_cone:2'
+              ]
+
+              NUM_POINT_FEATURES: 5
+              DATABASE_WITH_FAKELIDAR: False
+              REMOVE_EXTRA_WIDTH: [0.0, 0.0, 0.0]
+              LIMIT_WHOLE_SCENE: True
+
+              # hf cfg
+              use_hf: False
+              fr_path: /private_dataset/nuscenes_pcdet/v1.0-trainval/gt_database_10sweeps_withvelo
+              fr_num: 54899
+            
+            - NAME: velocity_aug
+
+            - NAME: random_world_flip
+              ALONG_AXIS_LIST: ['x', 'y']
+
+            - NAME: random_world_rotation
+              WORLD_ROT_ANGLE: [-0.78539816, 0.78539816]
+
+            - NAME: random_world_scaling
+              WORLD_SCALE_RANGE: [0.9, 1.1]
+            
+            - NAME: random_world_translation
+              NOISE_TRANSLATE_STD: [0.5, 0.5, 0.5]
+
+            # - NAME: image_mask_3d
+            #   MASK_TYPE: 'random'
+            #   MASK_NUM: 3
+
+            - NAME: imgaug
+              ROT_LIM: [-5.4, 5.4]
+              RAND_FLIP: True
+
+
+    DATA_PROCESSOR:
+        - NAME: mask_points_and_boxes_outside_range
+          REMOVE_OUTSIDE_BOXES: True
+
+        - NAME: shuffle_points
+          SHUFFLE_ENABLED: {
+            'train': True,
+            'test': True
+          }
+
+        - NAME: transform_points_to_voxels_placeholder
+          VOXEL_SIZE: [0.3, 0.3, 0.25]
+
+        - NAME: image_calibrate
+        
+        - NAME: image_normalize
+          use_debug_img: True
+          mean: [0.485, 0.456, 0.406]
+          std: [0.229, 0.224, 0.225]
+MODEL:
+    NAME: MambaFusion
+    USE_VOXEL_MAMBA: True
+    VFE:
+        NAME: DynamicVoxelVFE
+        RETURN_ABS_COORDS: *return_abs_coords
+        WITH_DISTANCE: False
+        USE_ABSLOTE_XYZ: True
+        USE_NORM: True
+        NUM_FILTERS: [ 128, 128 ]
+    BACKBONE_3D:
+        NAME: LION3DBackboneOneStride
+        USE_DOW5: True
+        # DOW5_DIFF: False
+        RETURN_ABS_COORDS: *return_abs_coords
+        FEATURE_DIM: 128
+        LAYER_DIM: [128, 128, 128, 128]
+        NUM_LAYERS: 4
+        DEPTHS: [2, 2, 2, 2]
+        LAYER_DOWN_SCALES: [[[2, 2, 2], [2, 2, 2]], [[2, 2, 2], [2, 2, 2]], [[2, 2, 2], [2, 2, 2]], [[2, 2, 2], [2, 2, 2]]]
+        WINDOW_SHAPE: [[13, 13, 32], [13, 13, 16], [13, 13, 8], [13, 13, 4]]
+        GROUP_SIZE: [4096, 2048, 1024, 512]
+        DIRECTION: ['x', 'y']
+        DIFF_SCALE: 0.2
+        DIFFUSION:  True #False #True
+        SHIFT: True
+        OPERATOR:
+          NAME: 'Mamba'
+          CFG:
+            d_state: 16
+            d_conv: 4
+            expand: 2
+            drop_path: 0.2
+
+    
+    MM_BACKBONE:
+      NAME: MambaFusion
+      VIS_TAG: False
+      use_test_interval: *use_test_interval
+      RETURN_ABS_COORDS: *return_abs_coords
+      USE_WINMAMBA: True
+      USE_ALL_MAMBA: True
+
+      USE_MAMBA_INTER2: True
+
+      USE_VMAMBA_PRETRAIN: True
+      EMBED_TYPE: 'fixed'
+
+      PATCH_EMBED:
+        in_channels: 3
+        image_size: [256, 704]
+        embed_dims: 128
+        patch_size: 8 
+        patch_norm: True 
+        norm_cfg: {'type': 'LN'}
+
+      IMAGE_INPUT_LAYER:
+        sparse_shape: [32, 88, 1]
+        d_model: [128]
+        # set_info: [[90, 3]]
+        set_info: [[90, 2]]
+        window_shape: [[30, 30, 1]]
+        hybrid_factor: [1, 1, 1] # x, y, z
+        shifts_list: [[[0, 0, 0], [15, 15, 0]]]
+        input_image: True
+      
+      LIDAR_INPUT_LAYER:
+        sparse_shape: [360, 360, 1]
+        d_model: [128]
+        # set_info: [[90, 3]]
+        set_info: [[90, 2]]
+        window_shape: [[30, 30, 1]]
+        hybrid_factor: [1, 1, 1] # x, y, z
+        shifts_list: [[[0, 0, 0], [15, 15, 0]]]
+      
+      set_info: [[90, 2]]
+      d_model: [128]
+      nhead: [8]
+      dim_feedforward: [256]
+      dropout: 0.0
+      activation: gelu
+      # checkpoint_blocks: [0,1,2] # here can save 50% CUDA memory with marginal speed drop
+      checkpoint_blocks: [0, 1] # here can save 50% CUDA memory with marginal speed drop
+      layer_cfg: {'use_bn': False, 'split_ffn': True, 'split_residual': True}
+
+      # fuse backbone config
+      FUSE_BACKBONE:
+
+        LIDAR2IMAGE:
+          block_start: 1
+          block_end: 2
+          point_cloud_range: [-54.0, -54.0, -5.0, 54.0, 54.0, 3.0]
+          voxel_size: [0.3,0.3,8.0]
+          sample_num: 1
+          lidar2image_layer:
+            sparse_shape: [96, 264, 6]
+            d_model: [128]
+            set_info: [[90, 1]]
+            window_shape: [[30, 30, 1]]
+            hybrid_factor: [1, 1, 1]
+            shifts_list: [[[0, 0, 0], [15, 15, 0]]]
+            expand_max_voxels: 30
+      # out_indices: [0, 1, 2]
+      out_indices: [0, 1]
+    
+    NECK:
+      NAME: GeneralizedLSSFPN
+      # IN_CHANNELS: [128, 128, 128]
+      IN_CHANNELS: [128, 128]
+      OUT_CHANNELS: 256
+      START_LEVEL: 0
+      END_LEVEL: -1
+      NUM_OUTS: 4
+      USE_BIAS: True
+      ALIGN_CORNERS: True
+
+    VTRANSFORM: 
+      NAME: LSSTransform_Lite
+      USE_MAMBA: True
+      MAMBA_DOWNSAMPLE_SCALE: 2
+      # USE_MULTI_BLOCK: True
+      IMAGE_SIZE: [256,704]
+      IN_CHANNEL: 256
+      OUT_CHANNEL: 80
+      FEATURE_SIZE: [32,88]
+      XBOUND: [-54.0, 54.0, 0.3]
+      YBOUND: [-54.0, 54.0, 0.3]
+      ZBOUND: [-10.0, 10.0, 20.0]
+      DBOUND: [1.0, 60.0, 0.5]
+      DOWNSAMPLE: 1
+
+    FUSER:
+      NAME: ConvFuser
+      # USE_MERGE_AFTER: True
+      # USE_VMAMBA: True
+      IN_CHANNEL: 208
+      OUT_CHANNEL: 128
+
+
+    MAP_TO_BEV:
+      NAME: PointPillarScatter3d
+      INPUT_SHAPE: [360, 360, 1]
+      NUM_BEV_FEATURES: 128
+
+    BACKBONE_2D:
+      NAME: BaseBEVResBackbone
+      LAYER_NUMS: [ 1, 2, 2, 2] # 
+      LAYER_STRIDES: [1, 2, 2, 2]
+      NUM_FILTERS: [128, 128, 256, 256]
+      UPSAMPLE_STRIDES: [0.5, 1, 2, 4]
+      NUM_UPSAMPLE_FILTERS: [128, 128, 128, 128]
+
+    DENSE_HEAD:
+        CLASS_AGNOSTIC: False
+        NAME: TransFusionHead
+        QUERY_RADIUS: 20 
+        QUERY_LOCAL: True
+        USE_BIAS_BEFORE_NORM: True
+
+        NUM_PROPOSALS: 200
+        HIDDEN_CHANNEL: 128
+        NUM_CLASSES: 10
+        NUM_HEADS: 8
+        NMS_KERNEL_SIZE: 3
+        FFN_CHANNEL: 256
+        DROPOUT: 0.1
+        BN_MOMENTUM: 0.1
+        ACTIVATION: relu
+
+
+        NUM_HM_CONV: 2
+        SEPARATE_HEAD_CFG:
+            HEAD_ORDER: ['center', 'height', 'dim', 'rot', 'vel','iou']
+            HEAD_DICT: {
+                'center': {'out_channels': 2, 'num_conv': 2},
+                'height': {'out_channels': 1, 'num_conv': 2},
+                'dim': {'out_channels': 3, 'num_conv': 2},
+                'rot': {'out_channels': 2, 'num_conv': 2},
+                'vel': {'out_channels': 2, 'num_conv': 2},
+                'iou': {'out_channels': 1, 'num_conv': 2}
+            }
+      
+        TARGET_ASSIGNER_CONFIG:
+            FEATURE_MAP_STRIDE: 2
+            DATASET: nuScenes
+            GAUSSIAN_OVERLAP: 0.1
+            MIN_RADIUS: 2
+            HUNGARIAN_ASSIGNER:
+                cls_cost: {'gamma': 2.0, 'alpha': 0.25, 'weight': 0.15}
+                reg_cost: {'weight': 0.25}
+                iou_cost: {'weight': 0.25}
+        
+        LOSS_CONFIG:
+            LOSS_WEIGHTS: {
+                    'cls_weight': 1.0,
+                    'bbox_weight': 0.25,
+                    'hm_weight': 1.0,
+                    'iou_weight': 0.5,
+                    'iou_reg_weight': 0.5,
+                    'code_weights': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.2, 0.2]
+                }
+            LOSS_CLS:
+                use_sigmoid: True
+                gamma: 2.0
+                alpha: 0.25
+            LOSS_IOU: True
+            LOSS_IOU_REG: True
+          
+        POST_PROCESSING:
+            SCORE_THRESH: 0.0
+            POST_CENTER_RANGE: [-61.2, -61.2, -10.0, 61.2, 61.2, 10.0]
+            USE_IOU_TO_RECTIFY_SCORE: True 
+            IOU_RECTIFIER: [0.5]
+        NMS_CONFIG:
+            NMS_TYPE: nms_gpu
+            NMS_THRESH: 0.2
+            NMS_PRE_MAXSIZE: 1000
+            NMS_POST_MAXSIZE: 100
+            SCORE_THRES: 0.
+          
+
+    POST_PROCESSING:
+        RECALL_THRESH_LIST: [0.3, 0.5, 0.7]
+        SCORE_THRESH: 0.1
+        OUTPUT_RAW_SCORE: False
+
+        EVAL_METRIC: kitti
+
+        NMS_CONFIG:
+            MULTI_CLASSES_NMS: True
+            NMS_TYPE: nms_gpu
+            NMS_THRESH: 0.2
+            NMS_PRE_MAXSIZE: 1000
+            NMS_POST_MAXSIZE: 83
+
+
+
+OPTIMIZATION:
+    BATCH_SIZE_PER_GPU: 3
+    NUM_EPOCHS: 10
+
+    ACCUMULATION_STEPS: 2
+
+    # OPTIMIZER: adam_onecycle
+    OPTIMIZER: adam_onecycle_split
+    LR: 0.0015
+    WEIGHT_DECAY: 0.03
+    MOMENTUM: 0.9
+
+    MOMS: [0.95, 0.85]
+    PCT_START: 0.4
+    DIV_FACTOR: 10
+    DECAY_STEP_LIST: [35, 45]
+    LR_DECAY: 0.1
+    LR_CLIP: 0.0000001
+
+    SPLIT_CFG:
+        MODEL_NAME: ['MambaFusion.Backbone_VSSM']
+        # FROZEN_LAYERS: ['Voxel_Mamba_Waymo']
+        SCALE: [0.1, 1]
+
+
+    LR_WARMUP: False
+    WARMUP_EPOCH: 1
+
+    GRAD_NORM_CLIP: 10
+    LOSS_SCALE_FP16: 32 
+
+HOOK:
+  DisableAugmentationHook:
+    DISABLE_AUG_LIST: ['gt_sampling'] # , 'image_mask_3d'
+    NUM_LAST_EPOCHS: 2

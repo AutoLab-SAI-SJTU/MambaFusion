@@ -1,0 +1,8 @@
+{
+    "exclude": [
+        "build",
+        "output",
+        "data",
+        "docs"
+    ]
+}
