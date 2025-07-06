@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>MambaFusion</h1>
+  <h1>MambaFusion [ICCV 2025]</h1>
   <h3>
     <a href="https://xxx.pdf" target="_blank" rel="noopener">
       Height-Fidelity Dense Global Fusion for Multi-modal 3D Object Detection
