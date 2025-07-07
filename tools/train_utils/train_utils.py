@@ -20,18 +20,7 @@ def train_one_epoch(model, optimizer, train_loader, model_func, lr_scheduler, ac
 
     scaler = torch.cuda.amp.GradScaler(enabled=use_amp, init_scale=optim_cfg.get('LOSS_SCALE_FP16', 2.0**16))
     accumulation_steps = optim_cfg.get('ACCUMULATION_STEPS', 1)
-    use_profiler = optim_cfg.get('USE_PROFILER', False)
-    if use_profiler:
-        wait, warmup, active, repeat = 1, 1, 1, 1
-        prof = torch.profiler.profile(
-            activities=[torch.profiler.ProfilerActivity.CPU, torch.profiler.ProfilerActivity.CUDA],
-            schedule=torch.profiler.schedule(skip_first=0, wait=wait, warmup=warmup, active=active, repeat=repeat),
-            on_trace_ready=torch.profiler.tensorboard_trace_handler('/home/hswang/AD/Fusion/UniTR4/output/log_profiler'),
-            record_shapes=False, with_stack=True, with_flops=False, profile_memory=False)
-        prof.start()
-        prof_cnt = 0
-        prof_cnt_max = (wait + warmup + active) * repeat
-        accumulation_steps = 1
+
     
     if rank == 0:
         pbar = tqdm.tqdm(total=total_it_each_epoch, leave=leave_pbar, desc='train', dynamic_ncols=True)
@@ -99,12 +88,6 @@ def train_one_epoch(model, optimizer, train_loader, model_func, lr_scheduler, ac
             scaler.step(optimizer)
             scaler.update()
             optimizer.zero_grad()
-        if use_profiler and prof_cnt < prof_cnt_max:
-            prof_cnt += 1
-            prof.step()
-            if prof_cnt == prof_cnt_max:
-                prof.stop()
-                print('Profiler stopped')
         
         accumulated_iter += 1
  

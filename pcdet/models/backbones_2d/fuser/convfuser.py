@@ -409,19 +409,6 @@ class ConvFuser(nn.Module):
         if self.use_merge_after:
             for block in self.merge_blocks:
                 cat_bev = block(cat_bev)
-        save_mamba=False
-        if save_mamba:
-            for batch_idx in range(cat_bev.shape[0]):
-                bev_mamba = cat_bev[batch_idx, :, 130:230,80:280]#.unsqueeze(0)
-                # bev_feature_resized = F.interpolate(bev_mamba, (200, 200), mode='bilinear').squeeze(0).permute(1, 2, 0).cpu().numpy()
-                bev_feature_resized = bev_mamba.cpu().numpy()
-                mambe_file_name = batch_dict['image_paths'][batch_idx][0].split('/')[-1].split('.')[0] + '.npy'
-                mamba_data_root = '/home/hswang/AD/Fusion/UniTR4/data/nuscenes/v1.0-trainval/samples/mamba'
-                mamba_file_path = os.path.join(mamba_data_root, mambe_file_name)
-                if not os.path.exists(mamba_data_root):
-                    os.makedirs(mamba_data_root)
-                np.save(mamba_file_path, bev_feature_resized)
-            print('Save mamba data done!')
         mm_bev = self.conv(cat_bev) # [2, 128, 360, 360]
 
         batch_dict['spatial_features'] = mm_bev

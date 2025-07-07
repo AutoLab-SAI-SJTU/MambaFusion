@@ -6,7 +6,7 @@ from matplotlib.patches import Polygon
 from torch import Tensor
 import torch
 
-save_path = '/home/hswang/AD/Fusion/UniTR4/tools/my_utils/vis_res/'
+save_path = 'tools/my_utils/vis_res/'
 
 def draw_pic_multi_view(images, img_type='Image', save_path=None):
     if len(images) != 6:
@@ -315,179 +315,7 @@ category_colors = {
             label_text += category[:prefix_num] + " "
         if show_id:
             label_text += f"ID: {i}"
-
-        # if label_text:
-        #     # 在边界框中心显示标签
-        #     ax.text(x, y, label_text, color=color, fontsize=8, ha='center', va='center')
-
-# def draw_bev_box(ax, bboxes_3d, name_list=None, prefix_num=3, show_id=False):
-#     """
-#     绘制鸟瞰图视角的2D框。
-#     :param ax: Matplotlib 的 axes 对象。
-#     :param bboxes_3d: 形状为 N*7 或 N*8 的数组，表示 N 个 3D 边界框。
-#     :param name_list: 名称列表，用于显示在框上。
-#     :param prefix_num: 显示名称的前缀字符数。
-#     :param show_id: 布尔值，如果为 True，则显示框的 id。
-#     """
-#     # 定义固定的类别列表和对应的颜色映射
-#     predefined_categories = ['car', 'truck', 'bus', 'trailer', 'construction_vehicle',
-#                              'pedestrian', 'bicycle', 'motorcycle', 'traffic_cone', 'barrier']
-#     cmap = plt.get_cmap('tab10')  # 使用 Matplotlib 的 'tab10' 调色板
-#     colors = {category: cmap(i % 10) for i, category in enumerate(predefined_categories)}
-#     default_color = 'black'  # 如果类别不在预定义列表中，使用默认颜色
-
-#     for i, bbox in enumerate(bboxes_3d):
-#         # 跳过空框
-#         if np.sum(bbox[:6]) == 0:
-#             continue
-#         if bbox.shape[0] == 7:
-#             x, y, _, l, w, h, yaw = bbox
-#         elif bbox.shape[0] == 8:
-#             x, y, _, l, w, h, yaw, label = bbox
-#         else:
-#             raise ValueError('每个检测框的格式必须是 (x, y, z, l, w, h, yaw) 或 (x, y, z, l, w, h, yaw, label)')
-        
-#         # 计算边界框的四个角点
-#         corner_1 = [x - l / 2, y - w / 2]
-#         corner_2 = [x + l / 2, y - w / 2]
-#         corner_3 = [x + l / 2, y + w / 2]
-#         corner_4 = [x - l / 2, y + w / 2]
-#         corners = np.array([corner_1, corner_2, corner_3, corner_4])
-        
-#         # 旋转角点
-#         c, s = np.cos(yaw), np.sin(yaw)
-#         R = np.array([[c, -s], [s, c]])
-#         rotated_corners = np.dot((corners - np.array([x, y])), R.T) + np.array([x, y])
-
-#         # 获取当前类别的颜色
-#         if name_list is not None:
-#             category = name_list[i].strip().lower()  # 规范化类别名称
-#             color = colors.get(category, default_color)
-#         else:
-#             color = default_color
-
-#         # 绘制边界框
-#         poly = plt.Polygon(rotated_corners, edgecolor=color, fill=False, linewidth=2.5)
-#         ax.add_patch(poly)
-        
-#         # 绘制标签
-#         label_text = ""
-#         if bbox.shape[0] == 8:
-#             label_text += str(int(label)) + " "
-#         if name_list is not None:
-#             label_text += category[:prefix_num] + " "
-#         if show_id:
-#             label_text += f"ID: {i}"
-        
-#         # if label_text.strip():
-#         #     ax.text(x, y, label_text.strip(), color=color, fontsize=10, 
-#         #             verticalalignment='top', horizontalalignment='left')
-
-            
-# def draw_bev_box(ax, bboxes_3d, color='r', name_list=None, prefix_num=3, show_id=False):
-#     """
-#     绘制鸟瞰图视角的2D框。
-#     :param ax: Matplotlib 的 axes 对象。
-#     :param bboxes_3d: 形状为 N*7 的数组，表示 N 个 3D 边界框。
-#     :param color: 绘制边界框的颜色。
-#     :param name_list: 名称列表，用于显示在框上。
-#     :param prefix_num: 显示名称的前缀字符数。
-#     :param show_id: 布尔值，如果为 True，则显示框的 id。
-#     """
-#     for i, bbox in enumerate(bboxes_3d):
-#         # 清除空框
-#         if sum(bbox[:6]) == 0:
-#             continue
-#         if bbox.shape[0] == 7:
-#             x, y, _, l, w, h, yaw = bbox
-#         elif bbox.shape[0] == 8:
-#             x, y, _, l, w, h, yaw, label = bbox
-#         else:
-#             raise ValueError('每个检测框的格式必须是 (x, y, z, l, w, h, yaw) 或 (x, y, z, l, w, h, yaw, label)')
-        
-#         # 计算边界框的四个角点
-#         corner_1 = [x - l / 2, y - w / 2]
-#         corner_2 = [x + l / 2, y - w / 2]
-#         corner_3 = [x + l / 2, y + w / 2]
-#         corner_4 = [x - l / 2, y + w / 2]
-
-#         corners = np.array([corner_1, corner_2, corner_3, corner_4])
-#         # 旋转角点
-#         c, s = np.cos(yaw), np.sin(yaw)
-#         R = np.array([[c, -s], [s, c]])
-#         rotated_corners = np.dot(corners - np.array([x, y]), R) + np.array([x, y])
-
-#         # 绘制边界框和对应的标签
-#         poly = plt.Polygon(rotated_corners, edgecolor=color, fill=False)
-#         ax.add_patch(poly)
-        
-#         # 绘制标签
-#         label_text = ""
-#         if bbox.shape[0] == 8:
-#             label_text += str(int(label)) + " "
-#         if name_list is not None:
-#             label_text += name_list[i][:prefix_num] + " "
-#         if show_id:
-#             label_text += f"ID: {i}"
-        
-#         if label_text:
-#             ax.text(x, y, label_text.strip(), color=color, fontsize=12, 
-#                     verticalalignment='top', horizontalalignment='left')
-# def draw_bev_box(ax, bboxes_3d, color='r', name_list=None, prefix_num=3, show_id=False):
-#     """
-#     绘制鸟瞰图视角的2D框，并显示框的朝向。
-#     :param ax: Matplotlib 的 axes 对象。
-#     :param bboxes_3d: 形状为 N*7 的数组，表示 N 个 3D 边界框。
-#     :param color: 绘制边界框的颜色。
-#     :param name_list: 名称列表，用于显示在框上。
-#     :param prefix_num: 显示名称的前缀字符数。
-#     :param show_id: 布尔值，如果为 True，则显示框的 id。
-#     """
-#     for i, bbox in enumerate(bboxes_3d):
-#         # 清除空框
-#         if sum(bbox[:6]) == 0:
-#             continue
-#         if bbox.shape[0] == 7:
-#             x, y, _, l, w, h, yaw = bbox
-#         elif bbox.shape[0] == 8:
-#             x, y, _, l, w, h, yaw, label = bbox
-#         else:
-#             raise ValueError('每个检测框的格式必须是 (x, y, z, l, w, h, yaw) 或 (x, y, z, l, w, h, yaw, label)')
-        
-#         # 计算边界框的四个角点
-#         corner_1 = [x - l / 2, y - w / 2]
-#         corner_2 = [x + l / 2, y - w / 2]
-#         corner_3 = [x + l / 2, y + w / 2]
-#         corner_4 = [x - l / 2, y + w / 2]
-
-#         corners = np.array([corner_1, corner_2, corner_3, corner_4])
-        
-#         # 旋转角点
-#         c, s = np.cos(yaw), np.sin(yaw)
-#         R = np.array([[c, -s], [s, c]])
-#         rotated_corners = np.dot(corners - np.array([x, y]), R) + np.array([x, y])
-
-#         # 绘制边界框
-#         poly = plt.Polygon(rotated_corners, edgecolor=color, fill=False)
-#         ax.add_patch(poly)
-        
-#         # 绘制朝向指示线
-#         # 计算朝向的边的中心点（正方向）
-#         front_center = (rotated_corners[0] + rotated_corners[3]) / 2  # 假设正方向在 corner_1 和 corner_2 之间
-#         ax.plot([x, front_center[0]], [y, front_center[1]], color=color, linestyle='-', linewidth=1.5)
-
-#         # 绘制标签
-#         label_text = ""
-#         if bbox.shape[0] == 8:
-#             label_text += str(int(label)) + " "
-#         if name_list is not None:
-#             label_text += name_list[i][:prefix_num] + " "
-#         if show_id:
-#             label_text += f"ID: {i}"
-        
-#         if label_text:
-#             ax.text(x, y, label_text.strip(), color=color, fontsize=12, 
-#                     verticalalignment='top', horizontalalignment='left')        
+      
 def draw_bboxes(bbox_data, ax, color='r', label_pos='top-left', name_list=None, prefix_num=3):
     import matplotlib.patches as patches
     import matplotlib.pyplot as plt
@@ -1164,33 +992,6 @@ def generalized_box_iou(boxes1: Tensor, boxes2: Tensor) -> Tensor:
     return iou - (areai - union) / areai
 
 
-# def adjust_yaw_parallel(yaws, lidar2cam_r):
-#     """
-#     Adjust an array of yaw angles based on the rotation matrix. 
-#     This is a simplified example.
-#     """
-#     def limit_period(val, offset=0.5, period=np.pi):
-#         """Limit the value into a period for periodic function.
-
-#         Args:
-#             val (torch.Tensor): The value to be converted.
-#             offset (float, optional): Offset to set the value range. \
-#                 Defaults to 0.5.
-#             period ([type], optional): Period of the value. Defaults to np.pi.
-
-#         Returns:
-#             torch.Tensor: Value in the range of \
-#                 [-offset * period, (1-offset) * period]
-#         """
-#         return val - torch.floor(val / period + offset) * period
-#     # adjusted_yaws = yaws + np.arctan2(lidar2cam_r[1, 0], lidar2cam_r[0, 0])
-#     yaw_view = -yaws- np.pi / 2
-#     rot_dir_view = torch.cat([torch.cos(yaw_view), torch.sin(yaw_view), torch.zeros_like(yaw_view)], dim=1)
-#     rot_dir_view = rot_dir_view @ lidar2cam_r.T
-#     rot_dir_view = rot_dir_view[:, [0, 2]]   
-#     yaw_view = -torch.atan2(rot_dir_view[:, 1:2], rot_dir_view[:, 0:1])
-#     yaw_view = limit_period(yaw_view, period=2*np.pi).cpu().numpy()
-#     return yaw_view
 def adjust_yaw_parallel(yaws, lidar2cam_r):
     """
     Adjust an array of yaw angles based on the rotation matrix using NumPy.
@@ -1219,30 +1020,7 @@ def adjust_yaw_parallel(yaws, lidar2cam_r):
 
     return yaw_view
 
-# def adjust_yaw_parallel(yaws, lidar2cam_r):
-#     """
-#     Adjust an array of yaw angles from Lidar coordinate system to Camera coordinate system based on the given rotation matrix.
-    
-#     Parameters:
-#     - yaws (np.ndarray): An array of yaw angles in the Lidar coordinate system.
-#     - lidar2cam_r (np.ndarray): A (3, 3) rotation matrix from Lidar to Camera coordinate system.
-    
-#     Returns:
-#     - np.ndarray: Adjusted yaw angles in the Camera coordinate system.
-#     """
-#     # Step 1: Convert yaw angles to direction vectors in Lidar coordinate system
-#     # Yaw angle to vector (x, z in Lidar; considering y as up direction)
 
-#     directions = np.vstack([np.cos(yaws), np.sin(yaws), np.zeros_like(yaws)]) # (3, N)
-    
-#     # Step 2: Rotate direction vectors to Camera coordinate system
-#     directions_cam = np.dot(lidar2cam_r, directions) # (3, N)
-    
-#     # Step 3: Convert direction vectors back to yaw angles in Camera coordinate system
-#     # atan2 returns angles in the range [-pi, pi], which is what we want for yaws
-#     yaws_cam = np.arctan2(-directions_cam[1], directions_cam[0]) # (N,)
-    
-#     return yaws_cam
 def transform_velocity_parallel(vxs, vys, lidar2cam_r):
     """
     Transform arrays of velocity components from lidar to camera coordinate system. 
@@ -1338,54 +1116,7 @@ def project_lidar_to_image(points, lidar2camera, camera_intrinsics, image_aug_ma
     return points_image_filtered, points_depth_filtered
 
 
-# def project_lidar_to_image_torch(points, lidar2camera, camera_intrinsics, image_aug_matrix, img_width, img_height):
-#     """
-#     将 LiDAR 点投影到图像平面，并应用图像增强矩阵，同时过滤掉不在图像范围内的点和深度为负数的点。
-#     :param points: LiDAR 坐标系下的点云，大小为 [N, 3]，每行是 (X, Y, Z) 坐标
-#     :param lidar2camera: LiDAR 到相机的外参矩阵，大小为 [4, 4]
-#     :param camera_intrinsics: 相机的内参矩阵，大小为 [4, 4]
-#     :param image_aug_matrix: 图像增强矩阵，大小为 [4, 4]
-#     :param img_width: 图像的宽度（像素）
-#     :param img_height: 图像的高度（像素）
-#     :return: 过滤后的图像平面上的点，大小为 [N, 2]，表示像素坐标
-#     """
-    
-#     # 1. 将点云扩展为齐次坐标 (X, Y, Z, 1)，以便与 4x4 矩阵相乘
-#     points_homogeneous = torch.cat([points, torch.ones((points.shape[0], 1), device=points.device)], dim=1)  # [N, 4]
-    
-#     # 2. 使用 lidar2camera 矩阵将 LiDAR 坐标系下的点转换为相机坐标系下的点
-#     points_camera = torch.matmul(lidar2camera, points_homogeneous.T).T  # [N, 4]
-    
-#     # 3. 从相机坐标系中提取 X, Y, Z 坐标（齐次坐标，第四列被丢弃）
-#     points_camera = points_camera[:, :3]  # [N, 3]
 
-#     # 4. 过滤掉深度 Z_c 小于等于 0 的点
-#     valid_depth_mask = points_camera[:, 2] > 0
-#     points_camera = points_camera[valid_depth_mask]  # 只保留深度为正的点
-    
-#     # 5. 将相机坐标系下的点归一化 (X_c / Z_c, Y_c / Z_c)，并添加一个 1，形成齐次坐标
-#     points_camera_normalized = torch.cat([points_camera[:, :2] / points_camera[:, 2:3], torch.ones((points_camera.shape[0], 1), device=points.device)], dim=1)  # [N, 3]
-    
-#     # 6. 使用相机内参矩阵将归一化坐标转换为图像上的像素坐标 (N, 4)
-#     points_image_homogeneous = torch.matmul(camera_intrinsics, torch.cat([points_camera_normalized, torch.ones((points_camera_normalized.shape[0], 1), device=points.device)], dim=1).T).T  # [N, 4]
-
-#     # 7. 应用图像增强矩阵进行变换
-#     points_image_augmented = torch.matmul(image_aug_matrix, points_image_homogeneous.T).T  # [N, 4]
-    
-#     # 8. 执行透视除法，将齐次坐标转换为 2D 像素坐标
-#     points_image = points_image_augmented[:, :2] / points_image_augmented[:, 3:4]  # [N, 2]
-    
-#     # 9. 过滤掉不在图像范围内的点
-#     valid_x_mask = (points_image[:, 0] >= 0) & (points_image[:, 0] < img_width)  # 保留在 [0, img_width) 范围内的 u 坐标
-#     valid_y_mask = (points_image[:, 1] >= 0) & (points_image[:, 1] < img_height)  # 保留在 [0, img_height) 范围内的 v 坐标
-#     valid_mask = valid_x_mask & valid_y_mask  # 同时满足 u 和 v 坐标范围的点
-    
-#     # 10. 应用过滤条件，得到在图像范围内的有效点
-#     points_image_filtered = points_image[valid_mask]
-#     points_depth_filtered = points_camera[valid_mask][:, 2]  # 保留对应的深度信息
-    
-#     # 返回过滤后的图像上的 2D 像素坐标和深度信息
-#     return points_image_filtered, points_depth_filtered
 
 
 def project_lidar_to_image_torch(points, lidar2camera, camera_intrinsics, image_aug_matrix, img_width, img_height, lidar_aug_matrix=None):

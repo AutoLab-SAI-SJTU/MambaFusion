@@ -151,84 +151,6 @@ if __name__ == '__main__':
     # N = 2 ** bit   # N must larger than BEV resolution
     device = torch.device('cuda')
 
-    # device = torch.device('cpu')
-
-    # z_max = 33 # for our setting, downstride = 1/2/4 | z_max = 33/17/9 for Waymo, z_max = 41/10/5 for nuScene
-    # z_max = 9 # for our setting, downstride = 1/2/4 | z_max = 41/17/9 
-    # use_size = N * N * z_max # Truncate the curve, z_max must be larger than the Z-axis resolution
-
-    # generate for original resolution
-    # bit = 9  
-    # N = 2 ** bit   # N must larger than BEV resolution
-    # z_max = 41
-    # use_size = N * N * z_max
-
-    # if dim == 3:
-    #     point_locs = torch.tensor([(z, y, x) for z in range(N) for y in range(N) for x in range(N)]).to(device)
-    # elif dim == 2:
-    #     point_locs = torch.tensor([(y, x) for y in range(N) for x in range(N)]).to(device)
-    # else: 
-    #     raise ValueError(
-    #     '''
-    #     The space dimension can only be 2 or 3 in the real world!
-    #     '''
-    #     )
-    
-    # curve_index = convert_to_index(point_locs, dim, bit).cpu()
-    # curve_index_used = curve_index[:use_size]
-    # torch.save(curve_index_used, f'./data/hilbert/curve_template_3d_rank_{bit}.pth')
-
-    # generate for downstride = 2
-    # bit = 8  
-    # N = 2 ** bit   # N must larger than BEV resolution
-    # z_max = 17
-    # use_size = N * N * z_max
-
-    # if dim == 3:
-    #     point_locs = torch.tensor([(z, y, x) for z in range(N) for y in range(N) for x in range(N)]).to(device)
-    # elif dim == 2:
-    #     point_locs = torch.tensor([(y, x) for y in range(N) for x in range(N)]).to(device)
-    # else: 
-    #     raise ValueError(
-    #     '''
-    #     The space dimension can only be 2 or 3 in the real world!
-    #     '''
-    #     )
-    
-    # curve_index = convert_to_index(point_locs, dim, bit).cpu()
-    # curve_index_used = curve_index[:use_size]
-    # torch.save(curve_index_used, f'./data/hilbert/curve_template_3d_rank_{bit}.pth')
-
-    # generate for downstride = 4
-    # bit = 3  
-    # N = 2 ** bit   # N must larger than BEV resolution
-    # z_max = 1
-    # use_size = N * N * z_max
-
-    # if dim == 3:
-    #     point_locs = torch.tensor([(z, y, x) for z in range(N) for y in range(N) for x in range(N)]).to(device)
-    # elif dim == 2:
-    #     point_locs = torch.tensor([(y, x) for y in range(N) for x in range(N)]).to(device)
-    # else: 
-    #     raise ValueError(
-    #     '''
-    #     The space dimension can only be 2 or 3 in the real world!
-    #     '''
-    #     )
-    
-    # curve_index = convert_to_index(point_locs, dim, bit).cpu()
-    # curve_index_used = curve_index[:use_size]
-    # vis = True
-    # if vis:
-    #     import matplotlib.pyplot as plt
-    #     curve_index_pos = curve_index_used.sort()[1]
-    #     new_points_locs = point_locs[curve_index_pos].cpu().numpy()
-    #     fig = plt.figure( figsize=(20, 20))
-    #     ax = fig.add_subplot(111, projection='3d')
-    #     ax.plot(new_points_locs[:, 2], new_points_locs[:, 1], new_points_locs[:, 0], '.-')
-    #     ax.axis('equal')
-    #     plt.savefig(f'/home/hswang/AD/Fusion/UniTR3/tools/my_utils/vis_res/curve_template_3d_rank_{bit}_{z_max}.png')
-    # torch.save(curve_index_used, f'./data/hilbert/curve_template_3d_rank_{bit}.pth')
 
 
     bit = 10  
@@ -249,16 +171,4 @@ if __name__ == '__main__':
     
     curve_index = convert_to_index(point_locs, dim, bit).cpu()
     curve_index_used = curve_index[:use_size]
-    vis = True
-    if vis:
-        import matplotlib.pyplot as plt
-        curve_index_pos = curve_index_used.sort()[1]
-        new_points_locs = point_locs[curve_index_pos].cpu().numpy()
-        fig = plt.figure( figsize=(20, 20))
-        ax = fig.add_subplot(111, projection='3d')
-        # ax.plot(new_points_locs[:, 2], new_points_locs[:, 1], new_points_locs[:, 0], '.-')
-        ax.plot( new_points_locs[:1000, 1], new_points_locs[:1000, 0], '.-')
-        ax.axis('equal')
-        plt.savefig(f'/home/hswang/AD/Fusion/UniTR4/tools/my_utils/vis_res/curve_template_3d_rank_{bit}_{z_max}.png')
-    # torch.save(curve_index_used, f'/home/hswang/AD/Fusion/UniTR4/ckpts/hilbert_template/curve_template_3d_rank_{bit}.pth')
 

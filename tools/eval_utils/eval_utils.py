@@ -55,18 +55,6 @@ def eval_one_epoch(cfg, args, model, dataloader, epoch_id, logger, dist_test=Fal
     if cfg.LOCAL_RANK == 0:
         progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval', dynamic_ncols=True)
 
-    use_profiler = cfg.OPTIMIZATION.get('USE_PROFILER', False)
-    if use_profiler:
-        wait, warmup, active, repeat = 1, 1, 1, 1
-        prof = torch.profiler.profile(
-            activities=[torch.profiler.ProfilerActivity.CPU, torch.profiler.ProfilerActivity.CUDA],
-            schedule=torch.profiler.schedule(skip_first=0, wait=wait, warmup=warmup, active=active, repeat=repeat),
-            on_trace_ready=torch.profiler.tensorboard_trace_handler('/home/hswang/AD/Fusion/UniTR4/output/log_profiler'),
-            record_shapes=True, with_stack=True, with_flops=False, profile_memory=True)
-        prof.start()
-        print('=========================Profiler started========================')
-        prof_cnt = 0
-        prof_cnt_max = (wait + warmup + active) * repeat
 
     start_time = time.time()
     save_results =  dataloader.dataset.dataset_cfg.get('SAVE_RESULTS', False)
@@ -89,12 +77,6 @@ def eval_one_epoch(cfg, args, model, dataloader, epoch_id, logger, dist_test=Fal
             batch_dict, pred_dicts, class_names,
             output_path=final_output_dir if args.save_to_file else None
         )
-        if use_profiler and prof_cnt < prof_cnt_max:
-            prof_cnt += 1
-            prof.step()
-            if prof_cnt == prof_cnt_max:
-                prof.stop()
-                print('Profiler stopped')
 
         det_annos += annos
         if cfg.LOCAL_RANK == 0:
