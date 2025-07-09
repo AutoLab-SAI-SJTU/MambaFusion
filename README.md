@@ -137,8 +137,8 @@ bash scripts/dist_train.sh 4 --cfg_file cfgs/mambafusion_models/mamba_fusion.yam
 cd tools
 bash scripts/dist_test.sh 4 --cfg_file cfgs/mambafusion_models/mamba_fusion.yaml --ckpt checkpoint_epoch_10.pth
 ```
-### Citation
-
+### ✨Citation
+We hope you find our work valuable. If so, please consider citing it as follows:
 ```
 @inproceedings{wang2025mambafusion,
     title={Height-Fidelity Dense Global Fusion for Multi-modal 3D Object Detection},
@@ -147,7 +147,7 @@ bash scripts/dist_test.sh 4 --cfg_file cfgs/mambafusion_models/mamba_fusion.yaml
     year={2025}
 }
 ```
-
+And if our work has helped you, a ⭐ star on our GitHub repository would be tremendously encouraging and help us continue improving!
 ### Acknowledgments
 MambaFusion uses code from a few open source repositories. Without the efforts of these folks (and their willingness to release their implementations), MambaFusion would not be possible. We thanks these authors for their efforts!
 - [OpenPCDet](https://github.com/VERITAS12/MambaFusion/blob/main)
