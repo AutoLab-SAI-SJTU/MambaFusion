@@ -7,7 +7,7 @@
   </h3>
   <p>
     <p>
-  <a href="https://veritas12.github.io/" target="_blank" rel="noopener">Hanshi Wang</a><sup>1,2,5*</sup>,
+  <a href="https://veritas12.github.io/" target="_blank" rel="noopener">Hanshi Wang</a><sup>1,2,3,5*</sup>,
   <a href="https://nlpr.ia.ac.cn/users/gaojin/index.htm" target="_blank" rel="noopener">Jin Gao</a><sup>1,2</sup>,
   <a href="https://people.ucas.ac.cn/~huweiming" target="_blank" rel="noopener">Weiming Hu</a><sup>1,2,5,6</sup>,
   <a href="https://zhipengzhang.cn/" target="_blank" rel="noopener">Zhipeng Zhang</a><sup>3,4†</sup>
