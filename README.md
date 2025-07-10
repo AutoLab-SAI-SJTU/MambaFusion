@@ -128,6 +128,11 @@ OpenPCDet
 | Model       | mAP  | NDS  | mATE | mASE | mAOE | mAVE | mAAE |
 | ----------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | MambaFusion | 73.2 | 75.9 | 23.3 | 22.3 | 26.8 | 21.5 | 13.2 |
+
+### Hilbert Curves
+You can either download our [pre-generated Hilbert curves](https://drive.google.com/drive/folders/1huzbUotusvePvsR-DyGJc6qfX0Cwubvd?usp=drive_link) or generate them yourself by running the `create_hilbert_curve_template.py` script in `tools/hilbert_curves/`. Once generated, place the resulting file into `ckpts/hilbert_template/`.
+
+
 ### Training
 
 ```
