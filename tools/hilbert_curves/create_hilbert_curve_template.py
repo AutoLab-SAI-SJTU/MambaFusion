@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
 
     # Generate Hilbert Curves 
-    # (bit=9, z_max=41) / (bit=8, z_max=17) / (bit=7, z_max=9)
+    # (bit=10, z_max=1) / (bit=9, z_max=41) / (bit=8, z_max=17) / (bit=7, z_max=9)
     dim = 2  # voxel-based dim is 3, pillar-based dim is 2
     # bit = 7  
     # N = 2 ** bit   # N must larger than BEV resolution
@@ -153,8 +153,7 @@ if __name__ == '__main__':
 
     # device = torch.device('cpu')
 
-    # z_max = 33 # for our setting, downstride = 1/2/4 | z_max = 33/17/9 for Waymo, z_max = 41/10/5 for nuScene
-    # z_max = 9 # for our setting, downstride = 1/2/4 | z_max = 41/17/9 
+    # z_max = 9
     # use_size = N * N * z_max # Truncate the curve, z_max must be larger than the Z-axis resolution
 
     # generate for original resolution
