@@ -122,7 +122,7 @@ OpenPCDet
 
 | Model       | mAP  | NDS  | mATE | mASE | mAOE | mAVE | mAAE | ckpt                                                         | Log                                                         |
 | ----------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ------------------------------------------------------------ | ----------------------------------------------------------- |
-| MambaFusion | 72.7 | 75.0 | 25.8 | 24.1 | 22.3 | 22.1 | 18.8 | [ckpt](https://drive.google.com/drive/folders/1TqvpIHA7plzoFdnGWvFgVYr45bgz-nQ3?usp=drive_link) | [Log](https://drive.google.com/drive/folders/1TqvpIHA7plzoFdnGWvFgVYr45bgz-nQ3?usp=drive_link) |
+| MambaFusion | 72.7 | 75.0 | 25.8 | 24.1 | 22.3 | 22.1 | 18.8 | [ckpt](https://drive.google.com/drive/folders/1TqvpIHA7plzoFdnGWvFgVYr45bgz-nQ3?usp=sharing) | [Log](https://drive.google.com/drive/folders/1TqvpIHA7plzoFdnGWvFgVYr45bgz-nQ3?usp=sharing) |
 
 3D Object Detection  (on NuScenes test)
 | Model       | mAP  | NDS  | mATE | mASE | mAOE | mAVE | mAAE |
@@ -130,7 +130,7 @@ OpenPCDet
 | MambaFusion | 73.2 | 75.9 | 23.3 | 22.3 | 26.8 | 21.5 | 13.2 |
 
 ### Hilbert Curves
-You can either download our [pre-generated Hilbert curves](https://drive.google.com/drive/folders/1huzbUotusvePvsR-DyGJc6qfX0Cwubvd?usp=drive_link) or generate them yourself by running the `create_hilbert_curve_template.py` script in `tools/hilbert_curves/`. Once generated, place the resulting file into `ckpts/hilbert_template/`.
+You can either download our [pre-generated Hilbert curves](https://drive.google.com/drive/folders/1huzbUotusvePvsR-DyGJc6qfX0Cwubvd?usp=sharing) or generate them yourself by running the `create_hilbert_curve_template.py` script in `tools/hilbert_curves/`. Once generated, place the resulting file into `ckpts/hilbert_template/`.
 
 
 ### Training
