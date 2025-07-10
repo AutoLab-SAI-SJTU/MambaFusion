@@ -218,17 +218,6 @@ if __name__ == '__main__':
     
     # curve_index = convert_to_index(point_locs, dim, bit).cpu()
     # curve_index_used = curve_index[:use_size]
-    # vis = True
-    # if vis:
-    #     import matplotlib.pyplot as plt
-    #     curve_index_pos = curve_index_used.sort()[1]
-    #     new_points_locs = point_locs[curve_index_pos].cpu().numpy()
-    #     fig = plt.figure( figsize=(20, 20))
-    #     ax = fig.add_subplot(111, projection='3d')
-    #     ax.plot(new_points_locs[:, 2], new_points_locs[:, 1], new_points_locs[:, 0], '.-')
-    #     ax.axis('equal')
-    #     plt.savefig(f'/home/hswang/AD/Fusion/UniTR3/tools/my_utils/vis_res/curve_template_3d_rank_{bit}_{z_max}.png')
-    # torch.save(curve_index_used, f'./data/hilbert/curve_template_3d_rank_{bit}.pth')
 
 
     bit = 10  
