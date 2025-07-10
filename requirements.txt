@@ -10,7 +10,7 @@ SharedArray==3.0.0
 opencv-python
 pyquaternion
 spconv-cu118
-av2
+av2==0.2.1
 kornia==0.7.3
 shapely==1.8.4
 packaging
@@ -26,3 +26,5 @@ fvcore
 seaborn
 setuptools
 ninja
+transformers==4.43.3
+ipdb
