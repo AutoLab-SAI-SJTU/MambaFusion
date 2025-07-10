@@ -47,11 +47,14 @@ We present the first work demonstrating that a pure Mamba block can achieve effi
 [2025.7.03] Code of MambaFusion is released.
 
 ### Installation
-
+Please refer to the [install.md](docs/install.md) file for the detailed version information of each package.
 ```
-conda create -n unitr python=3.8
-# Install torch, we only test it in pytorch 1.10
-pip install torch==1.10.1+cu113 torchvision==0.11.2+cu113 -f https://download.pytorch.org/whl/torch_stable.html
+conda create -n mambafusion python=3.8
+
+# You can install CUDA 11.8 (if it isn’t already on your system) by running the following command:
+# conda install --channel "nvidia/label/cuda-11.8.0" cuda 
+pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
+
 
 git clone https://github.com/VERITAS12/MambaFusion.git
 cd MambaFusion
