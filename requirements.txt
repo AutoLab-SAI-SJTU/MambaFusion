@@ -24,3 +24,5 @@ submitit
 tensorboardX
 fvcore
 seaborn
+setuptools
+ninja

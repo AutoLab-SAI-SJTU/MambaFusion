@@ -47,7 +47,8 @@ We present the first work demonstrating that a pure Mamba block can achieve effi
 [2025.7.03] Code of MambaFusion is released.
 
 ### Installation
-Please refer to the [install.md](docs/install.md) file for the detailed version information of each package.
+
+If you encounter any problems, please consult the [install.md](docs/install.md) file for the exact version requirements of each package. If the issue still isn’t resolved, feel free to open an issue.
 ```
 conda create -n mambafusion python=3.8
 
@@ -55,12 +56,13 @@ conda create -n mambafusion python=3.8
 # conda install --channel "nvidia/label/cuda-11.8.0" cuda 
 pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 
+# Install extra dependency
+pip install -r requirements.txt
+
+pip install https://data.pyg.org/whl/torch-2.1.0%2Bcu118/torch_scatter-2.1.2%2Bpt21cu118-cp38-cp38-linux_x86_64.whl
 
 git clone https://github.com/VERITAS12/MambaFusion.git
 cd MambaFusion
-
-# Install extra dependency
-pip install -r requirements.txt
 
 # Install nuscenes-devkit
 pip install nuscenes-devkit==1.0.5
@@ -68,7 +70,7 @@ pip install nuscenes-devkit==1.0.5
 # Develop
 python setup.py develop
 
-python mambafusion_setup  
+python mambafusion_setup.py develop
 
 cd selective_scan
 python setup.py develop
@@ -76,7 +78,6 @@ python setup.py develop
 cd mamba_diffv/mamba
 python setup.py develop
 ```
-
 ### Dataset Preparation
 
 - Please download the official [NuScenes 3D object detection dataset](https://www.nuscenes.org/download) and organize the downloaded files as follows:
