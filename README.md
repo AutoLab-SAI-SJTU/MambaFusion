@@ -36,6 +36,7 @@
 
 ### Abstract
 We present the first work demonstrating that a pure Mamba block can achieve efficient Dense Global Fusion, meanwhile guaranteeing top performance for camera-LiDAR multi-modal 3D object detection. Our motivation stems from the observation that existing fusion strategies are constrained by their inability to simultaneously achieve efficiency, long-range modeling, and retaining complete scene information. Inspired by recent advances in state-space models (SSMs) and linear attention, we leverage their linear complexity and long-range modeling capabilities to address these challenges. However, this is non-trivial since our experiments reveal that simply adopting efficient linear-complexity methods does not necessarily yield improvements and may even degrade performance. We attribute this degradation to the loss of height information during multi-modal alignment, leading to deviations in sequence order. To resolve this, we propose height-fidelity LiDAR encoding that preserves precise height information through voxel compression in continuous space, thereby enhancing camera-LiDAR alignment. Subsequently, we introduce the Hybrid Mamba Block, which leverages the enriched height-informed features to conduct local and global contextual learning. By integrating these components, our method achieves state-of-the-art performance with the top-tire NDS score of 75.0 on the nuScenes validation benchmark, even surpassing methods that utilize high-resolution inputs. Meanwhile, our method maintains efficiency, achieving faster inference speed than most recent state-of-the-art methods. 
+
 ### Overview
 
 ![image-20250703170204193](assets/main.png)
@@ -45,6 +46,8 @@ We present the first work demonstrating that a pure Mamba block can achieve effi
 [2025.6.26] MambaFusion is accepted by ICCV25.
 
 [2025.7.03] Code of MambaFusion is released.
+
+[2025.7.11] MambaFusion is reposted by \[[自动驾驶之心](https://mp.weixin.qq.com/s/xLWecCVRXp2vxM6qtJk9Qg)\].
 
 ### Installation
 
