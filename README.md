@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>MambaFusion [ICCV 2025]</h1>
+  <h1>MambaFusion [ICCV 2025 Highlight]</h1>
   <h3>
     <a href="https://arxiv.org/abs/2507.04369" target="_blank" rel="noopener">
       Height-Fidelity Dense Global Fusion for Multi-modal 3D Object Detection
@@ -48,6 +48,8 @@ We present the first work demonstrating that a pure Mamba block can achieve effi
 [2025.7.03] Code of MambaFusion is released.
 
 [2025.7.11] MambaFusion is reposted by \[[自动驾驶之心](https://mp.weixin.qq.com/s/xLWecCVRXp2vxM6qtJk9Qg)\].
+
+[2025.7.24] MambaFusion is 🌟highlighted by ICCV 2025.
 
 ### Installation
 
