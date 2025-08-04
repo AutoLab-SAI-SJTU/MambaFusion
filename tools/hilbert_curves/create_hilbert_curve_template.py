@@ -157,66 +157,48 @@ if __name__ == '__main__':
     # use_size = N * N * z_max # Truncate the curve, z_max must be larger than the Z-axis resolution
 
     # generate for original resolution
-    # bit = 9  
-    # N = 2 ** bit   # N must larger than BEV resolution
-    # z_max = 41
-    # use_size = N * N * z_max
+    bit = 9  
+    N = 2 ** bit   # N must larger than BEV resolution
+    z_max = 41
+    use_size = N * N * z_max
 
-    # if dim == 3:
-    #     point_locs = torch.tensor([(z, y, x) for z in range(N) for y in range(N) for x in range(N)]).to(device)
-    # elif dim == 2:
-    #     point_locs = torch.tensor([(y, x) for y in range(N) for x in range(N)]).to(device)
-    # else: 
-    #     raise ValueError(
-    #     '''
-    #     The space dimension can only be 2 or 3 in the real world!
-    #     '''
-    #     )
+    if dim == 3:
+        point_locs = torch.tensor([(z, y, x) for z in range(N) for y in range(N) for x in range(N)]).to(device)
+    elif dim == 2:
+        point_locs = torch.tensor([(y, x) for y in range(N) for x in range(N)]).to(device)
+    else: 
+        raise ValueError(
+        '''
+        The space dimension can only be 2 or 3 in the real world!
+        '''
+        )
     
-    # curve_index = convert_to_index(point_locs, dim, bit).cpu()
-    # curve_index_used = curve_index[:use_size]
-    # torch.save(curve_index_used, f'./data/hilbert/curve_template_3d_rank_{bit}.pth')
+    curve_index = convert_to_index(point_locs, dim, bit).cpu()
+    curve_index_used = curve_index[:use_size]
+    torch.save(curve_index_used, f'./data/hilbert/curve_template_3d_rank_{bit}.pth')
 
     # generate for downstride = 2
-    # bit = 8  
-    # N = 2 ** bit   # N must larger than BEV resolution
-    # z_max = 17
-    # use_size = N * N * z_max
+    bit = 8  
+    N = 2 ** bit   # N must larger than BEV resolution
+    z_max = 17
+    use_size = N * N * z_max
 
-    # if dim == 3:
-    #     point_locs = torch.tensor([(z, y, x) for z in range(N) for y in range(N) for x in range(N)]).to(device)
-    # elif dim == 2:
-    #     point_locs = torch.tensor([(y, x) for y in range(N) for x in range(N)]).to(device)
-    # else: 
-    #     raise ValueError(
-    #     '''
-    #     The space dimension can only be 2 or 3 in the real world!
-    #     '''
-    #     )
+    if dim == 3:
+        point_locs = torch.tensor([(z, y, x) for z in range(N) for y in range(N) for x in range(N)]).to(device)
+    elif dim == 2:
+        point_locs = torch.tensor([(y, x) for y in range(N) for x in range(N)]).to(device)
+    else: 
+        raise ValueError(
+        '''
+        The space dimension can only be 2 or 3 in the real world!
+        '''
+        )
     
-    # curve_index = convert_to_index(point_locs, dim, bit).cpu()
-    # curve_index_used = curve_index[:use_size]
-    # torch.save(curve_index_used, f'./data/hilbert/curve_template_3d_rank_{bit}.pth')
+    curve_index = convert_to_index(point_locs, dim, bit).cpu()
+    curve_index_used = curve_index[:use_size]
+    torch.save(curve_index_used, f'./data/hilbert/curve_template_3d_rank_{bit}.pth')
 
-    # generate for downstride = 4
-    # bit = 3  
-    # N = 2 ** bit   # N must larger than BEV resolution
-    # z_max = 1
-    # use_size = N * N * z_max
 
-    # if dim == 3:
-    #     point_locs = torch.tensor([(z, y, x) for z in range(N) for y in range(N) for x in range(N)]).to(device)
-    # elif dim == 2:
-    #     point_locs = torch.tensor([(y, x) for y in range(N) for x in range(N)]).to(device)
-    # else: 
-    #     raise ValueError(
-    #     '''
-    #     The space dimension can only be 2 or 3 in the real world!
-    #     '''
-    #     )
-    
-    # curve_index = convert_to_index(point_locs, dim, bit).cpu()
-    # curve_index_used = curve_index[:use_size]
 
 
     bit = 10  

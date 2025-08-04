@@ -6,7 +6,7 @@ import time
 import glob
 from torch.nn.utils import clip_grad_norm_
 from pcdet.utils import common_utils, commu_utils
-from tools.my_utils.hook_tools import forward_times, backward_times
+
 
 def train_one_epoch(model, optimizer, train_loader, model_func, lr_scheduler, accumulated_iter, optim_cfg,
                     rank, tbar, total_it_each_epoch, dataloader_iter, tb_log=None, leave_pbar=False, 
